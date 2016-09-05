@@ -46,7 +46,7 @@ class PersonController @Inject() (repo: PersonRepository, val messagesApi: Messa
       // We also wrap the result in a successful future, since this action is synchronous, but we're required to return
       // a future because the person creation function returns a future.
       errorForm => {
-        Future.successful(Ok(views.html.index(errorForm)))
+        Future.successful(BadRequest(views.html.index(errorForm)))
       },
       // There were no errors in the from, so create the person.
       person => {
@@ -61,7 +61,7 @@ class PersonController @Inject() (repo: PersonRepository, val messagesApi: Messa
   /**
    * A REST endpoint that gets all the people as JSON.
    */
-  def getPersons: Action[Any] = Action.async {
+  def getPersons = Action.async {
   	repo.list().map { people =>
       Ok(Json.toJson(people))
     }
